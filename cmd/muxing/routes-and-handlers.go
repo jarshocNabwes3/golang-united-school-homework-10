@@ -4,6 +4,7 @@ import (
 	"io/ioutil"
 	"net/http"
 	"strconv"
+	"strings"
 
 	"github.com/gorilla/mux"
 )
@@ -28,7 +29,10 @@ func badRequest(w http.ResponseWriter, r *http.Request) {
 }
 
 func requestPath(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	param := strings.Split(r.URL.Path, "/")[2]
+	// vars := mux.Vars(r)
+	body := "Hello, " + param + "!"
+	w.Write([]byte(body))
 }
 
 func addRoutes(router *mux.Router) {
@@ -36,5 +40,5 @@ func addRoutes(router *mux.Router) {
 		Headers("a", "", "b", "")
 	router.HandleFunc("/data", sumAandB).Methods("POST")
 	router.HandleFunc("/bad", badRequest).Methods("GET")
-	router.HandleFunc("/name", requestPath).Methods("GET")
+	router.HandleFunc("/name/{param}", requestPath).Methods("GET")
 }
