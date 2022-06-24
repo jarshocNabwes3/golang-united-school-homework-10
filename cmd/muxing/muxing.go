@@ -17,9 +17,24 @@ Feel free to drop gorilla.mux if you want and use any other solution available.
 main function reads host/port from env just for an example, flavor it following your taste
 */
 
+func SumAandB(w http.ResponseWriter, r *http.Request) {
+	a, _ := strconv.Atoi(r.Header["A"][0])
+	b, _ := strconv.Atoi(r.Header["B"][0])
+	c := strconv.Itoa(a + b)
+	w.Header()["a+b"] = []string{c}
+	w.WriteHeader(http.StatusOK)
+}
+
+func addRoutes(router *mux.Router) {
+	router.HandleFunc("/headers", SumAandB).Methods("POST").
+		Headers("a", "", "b", "")
+}
+
 // Start /** Starts the web server listener on given host and port.
 func Start(host string, port int) {
 	router := mux.NewRouter()
+
+	addRoutes(router)
 
 	log.Println(fmt.Printf("Starting API server on %s:%d\n", host, port))
 	if err := http.ListenAndServe(fmt.Sprintf("%s:%d", host, port), router); err != nil {
