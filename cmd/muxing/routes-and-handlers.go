@@ -20,7 +20,7 @@ func sumAandB(w http.ResponseWriter, r *http.Request) {
 func bodyMessage(w http.ResponseWriter, r *http.Request) {
 	defer r.Body.Close()
 	body, _ := ioutil.ReadAll(r.Body)
-	body = append([]byte(`I got message:\n`), body...)
+	body = append([]byte("I got message:\n"), body...)
 	w.Write(body)
 }
 
@@ -38,7 +38,7 @@ func requestPath(w http.ResponseWriter, r *http.Request) {
 func addRoutes(router *mux.Router) {
 	router.HandleFunc("/headers", sumAandB).Methods("POST").
 		Headers("a", "", "b", "")
-	router.HandleFunc("/data", sumAandB).Methods("POST")
+	router.HandleFunc("/data", bodyMessage).Methods("POST")
 	router.HandleFunc("/bad", badRequest).Methods("GET")
 	router.HandleFunc("/name/{param}", requestPath).Methods("GET")
 }

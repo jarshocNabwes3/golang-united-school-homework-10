@@ -49,7 +49,7 @@ func TestBodyMessage(t *testing.T) {
 	}
 	handler.ServeHTTP(rr, req)
 
-	expected := `I got message:\nPARAM`
+	expected := "I got message:\nPARAM"
 	if rr.Body.String() != expected {
 		t.Errorf("handler returned unexpected body: got %v want %v",
 			rr.Body, expected)
