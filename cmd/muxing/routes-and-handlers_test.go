@@ -56,3 +56,16 @@ func TestBodyMessage(t *testing.T) {
 	}
 
 }
+
+func TestBadRequest(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/bad", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(badRequest)
+
+	if status := rr.Code; status != http.StatusInternalServerError {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusInternalServerError)
+	}
+	handler.ServeHTTP(rr, req)
+
+}

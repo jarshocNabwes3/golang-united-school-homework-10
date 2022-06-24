@@ -23,8 +23,13 @@ func bodyMessage(w http.ResponseWriter, r *http.Request) {
 	w.Write(body)
 }
 
+func badRequest(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 func addRoutes(router *mux.Router) {
 	router.HandleFunc("/headers", sumAandB).Methods("POST").
 		Headers("a", "", "b", "")
 	router.HandleFunc("/data", sumAandB).Methods("POST")
+	router.HandleFunc("/bad", badRequest).Methods("GET")
 }
