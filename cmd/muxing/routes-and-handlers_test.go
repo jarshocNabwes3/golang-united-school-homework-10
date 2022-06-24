@@ -69,3 +69,23 @@ func TestBadRequest(t *testing.T) {
 			status, http.StatusInternalServerError)
 	}
 }
+
+func TestRequestPath(t *testing.T) {
+	req, _ := http.NewRequest("GET", "/name/Watcher", nil)
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(requestPath)
+
+	handler.ServeHTTP(rr, req)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+
+	expected := `Hello, Watcher!`
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body, expected)
+	}
+
+}

@@ -27,9 +27,14 @@ func badRequest(w http.ResponseWriter, r *http.Request) {
 	w.WriteHeader(http.StatusInternalServerError)
 }
 
+func requestPath(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+}
+
 func addRoutes(router *mux.Router) {
 	router.HandleFunc("/headers", sumAandB).Methods("POST").
 		Headers("a", "", "b", "")
 	router.HandleFunc("/data", sumAandB).Methods("POST")
 	router.HandleFunc("/bad", badRequest).Methods("GET")
+	router.HandleFunc("/name", requestPath).Methods("GET")
 }
