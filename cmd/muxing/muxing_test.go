@@ -1,6 +1,7 @@
 package main
 
 import (
+	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -16,7 +17,7 @@ func TestSumAandB(t *testing.T) {
 
 	// We create a ResponseRecorder (which satisfies http.ResponseWriter) to record the response.
 	rr := httptest.NewRecorder()
-	handler := http.HandlerFunc(SumAandB)
+	handler := http.HandlerFunc(sumAandB)
 
 	// Our handlers satisfy http.Handler, so we can call their ServeHTTP method
 	// directly and pass in our Request and ResponseRecorder.
@@ -31,7 +32,27 @@ func TestSumAandB(t *testing.T) {
 	// Check the response header is what we expect.
 	expected := `5`
 	if rr.Header()["a+b"][0] != expected {
-		t.Errorf("handler returned unexpected body: got %v want %v",
+		t.Errorf("handler returned unexpected header: got %v want %v",
 			rr.Header(), expected)
 	}
+}
+
+func TestBodyMessage(t *testing.T) {
+	req, _ := http.NewRequest("POST", "/data", bytes.NewBufferString("PARAM"))
+
+	rr := httptest.NewRecorder()
+	handler := http.HandlerFunc(bodyMessage)
+
+	if status := rr.Code; status != http.StatusOK {
+		t.Errorf("handler returned wrong status code: got %v want %v",
+			status, http.StatusOK)
+	}
+	handler.ServeHTTP(rr, req)
+
+	expected := `I got message:\nPARAM`
+	if rr.Body.String() != expected {
+		t.Errorf("handler returned unexpected body: got %v want %v",
+			rr.Body, expected)
+	}
+
 }
