@@ -24,7 +24,7 @@ func bodyMessage(w http.ResponseWriter, r *http.Request) {
 }
 
 func badRequest(w http.ResponseWriter, r *http.Request) {
-	w.WriteHeader(http.StatusOK)
+	w.WriteHeader(http.StatusInternalServerError)
 }
 
 func addRoutes(router *mux.Router) {
