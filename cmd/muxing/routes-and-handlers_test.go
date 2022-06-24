@@ -7,6 +7,8 @@ import (
 	"testing"
 )
 
+const msgWrongStatusCode = "handler returned wrong status code: got %v want %v"
+
 func TestSumAandB(t *testing.T) {
 	// Create a request to pass to our handler. We don't have any query parameters for now, so we'll
 	// pass 'nil' as the third parameter.
@@ -25,8 +27,7 @@ func TestSumAandB(t *testing.T) {
 
 	// Check the status code is what we expect.
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
+		t.Errorf(msgWrongStatusCode, status, http.StatusOK)
 	}
 
 	// Check the response header is what we expect.
@@ -44,8 +45,7 @@ func TestBodyMessage(t *testing.T) {
 	handler := http.HandlerFunc(bodyMessage)
 
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
+		t.Errorf(msgWrongStatusCode, status, http.StatusOK)
 	}
 	handler.ServeHTTP(rr, req)
 
@@ -78,8 +78,7 @@ func TestRequestPath(t *testing.T) {
 	handler.ServeHTTP(rr, req)
 
 	if status := rr.Code; status != http.StatusOK {
-		t.Errorf("handler returned wrong status code: got %v want %v",
-			status, http.StatusOK)
+		t.Errorf(msgWrongStatusCode, status, http.StatusOK)
 	}
 
 	expected := `Hello, Watcher!`
