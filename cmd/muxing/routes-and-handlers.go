@@ -1,6 +1,7 @@
 package main
 
 import (
+	"io/ioutil"
 	"net/http"
 	"strconv"
 
@@ -16,6 +17,10 @@ func sumAandB(w http.ResponseWriter, r *http.Request) {
 }
 
 func bodyMessage(w http.ResponseWriter, r *http.Request) {
+	defer r.Body.Close()
+	body, _ := ioutil.ReadAll(r.Body)
+	body = append([]byte(`I got message:\n`), body...)
+	w.Write(body)
 }
 
 func addRoutes(router *mux.Router) {
